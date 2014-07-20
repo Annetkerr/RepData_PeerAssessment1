@@ -1,7 +1,32 @@
 # Reproducible Research: Peer Assessment 1
 
 
+```{r global_options, include=FALSE, cache=TRUE, echo=TRUE}
+# Set default code chunk options
+opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+```
+
+
 ## Loading and preprocessing the data
+
+Read the file into data frame df 
+```{r }
+df <- read.csv("activity/activity.csv")
+```
+
+Print the number of observations
+```{r echo=TRUE}
+n <-nrow(df)
+```
+The dataset contains `r n` rows
+
+
+Explore missing values
+```{r echo=TRUE}
+naindex <- which(is.na(df$steps)==TRUE)
+nacount <- length(naindex)
+```
+There are `r nacount` rows with missing values
 
 
 
