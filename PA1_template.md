@@ -7,27 +7,27 @@ advice and help from the class discussion thread,but this is still
 a work in process. 
 I appreciate any feedback or advice you can give. Thank you. 
 
-```{r global_options, include=FALSE, cache=TRUE, echo=TRUE}
-# Set default code chunk options
-opts_chunk$set(echo=TRUE, warning=TRUE, message=TRUE)
-```
+
 
 
 ## Loading and preprocessing the data
 
 Read the file into data frame df 
-```{r }
+
+```r
 df <- read.csv("activity/activity.csv")
 ```
 
 Print the number of observations
-```{r echo=TRUE}
+
+```r
 n <-nrow(df)
 ```
-The dataset contains `r n` rows
+The dataset contains 17568 rows
 
 Explore missing values in the original dataset
-```{r echo=TRUE}
+
+```r
 naindex <- which(is.na(df$steps)==TRUE)
 nacount <- length(naindex)
 ```
@@ -36,15 +36,27 @@ nacount <- length(naindex)
 ## What is mean total number of steps taken per day?
 
 Create new data frame with replacing "na" with 0 
-```{r  }
+
+```r
 ndf <- df
 ndf[naindex,1] <- 0
 ```
 
 
 Display the first few lines to see that it has been done
-```{r echo=TRUE}
+
+```r
 head(ndf)
+```
+
+```
+##   steps       date interval
+## 1     0 2012-10-01        0
+## 2     0 2012-10-01        5
+## 3     0 2012-10-01       10
+## 4     0 2012-10-01       15
+## 5     0 2012-10-01       20
+## 6     0 2012-10-01       25
 ```
 
 
@@ -52,9 +64,8 @@ Calculate how many days are represented, and how many steps were taken each day
 
 Store the steps taken per day in a dailyTotals vector
 
-```{r echo=TRUE}
 
-
+```r
 #initialize variables
 
 #set tallies to zero
@@ -94,25 +105,39 @@ for (i in 1:n) {
 Make a historgram of the total number of steps taken each day
 !!!!!!!!!!!!!!!this is wrong - go back and fix it!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-```{r echo=TRUE}
+
+```r
 h <- hist(dailyTotals, breaks=days, plot=TRUE,
           main="Total Steps Per Day", xlab="Days", ylab="Number of Steps")
 ```
 
+![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7.png) 
+
 Calculate and report the mean and median total number of steps taken per day
 
-```{r echo=TRUE}
+
+```r
 meandt <- as.integer(mean(dailyTotals, na.rm = FALSE))
 mediandt <- as.integer(median(dailyTotals, na.rm = FALSE))
 ```
 
 
-Mean daily total is: `r meandt`
+Mean daily total is: 9354
 
-Median daily total is: `r mediandt`
+Median daily total is: 10395
 
-```{r echo=TRUE}
+
+```r
 dailyTotals
+```
+
+```
+##  [1]     0   126 11352 12116 13294 15420 11015     0 12811  9900 10304
+## [12] 17382 12426 15098 10139 15084 13452 10056 11829 10395  8821 13460
+## [23]  8918  8355  2492  6778 10119 11458  5018  9819 15414     0 10600
+## [34] 10571     0 10439  8334 12883  3219     0     0 12608 10765  7336
+## [45]     0    41  5441 14339 15110  8841  4472 12787 20427 21194 14478
+## [56] 11834 11162 13646 10183  7047     0
 ```
 
 
@@ -122,17 +147,30 @@ dailyTotals
 
 Sort the file by time intervals
 
-```{r echo=TRUE}
+
+```r
 df2 <- ndf[ order (df[,3]), ]  
 ```
 
 Display the first few lines to see that it has been done
-```{r echo=TRUE} 
+
+```r
 head(df2)
 ```
 
+```
+##      steps       date interval
+## 1        0 2012-10-01        0
+## 289      0 2012-10-02        0
+## 577      0 2012-10-03        0
+## 865     47 2012-10-04        0
+## 1153     0 2012-10-05        0
+## 1441     0 2012-10-06        0
+```
+
 Process sorted file to determine average number of steps per time interval
-```{r echo=TRUE}
+
+```r
 #initialize variables
 
 
@@ -184,15 +222,27 @@ for (i in 1:n) {
 
 Display summary statistics for interval totals
 
-```{r echo=TRUE}
+
+```r
 summary(intervalTotals)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##       0     132    1810    1980    2800   10900
 ```
 
 
 Display summary statistics for interval averages
 
-```{r echo=TRUE}
+
+```r
 summary(intervalAvg)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##  0.0000  0.0075  0.1030  0.1130  0.1590  0.6220
 ```
 
 Make a time series plot of the 5-minute intervals and the average number of steps across all the days.
@@ -200,9 +250,12 @@ Make a time series plot of the 5-minute intervals and the average number of step
 For this I took the vector of averages per time slot previoulsy created
 and plotted it as a time series.
 
-```{r echo=TRUE}
+
+```r
 plot(as.ts(intervalAvg), type = "l")
 ```
+
+![plot of chunk unnamed-chunk-15](figure/unnamed-chunk-15.png) 
 
 
 Which 5-minute interval, on average across all days in the dataset, contains the maximum number of steps?
@@ -210,29 +263,33 @@ Which 5-minute interval, on average across all days in the dataset, contains the
 For this I took the vector of averages per time slot previoulsy created
 and displayed the max value.
 
-```{r echo=TRUE}
+
+```r
 m <- max(intervalAvg)
 ```
 
-The maximum number of steps, on average, is `r m` 
+The maximum number of steps, on average, is 0.622 
 
 
-```{r echo=TRUE}
+
+```r
 mi <- which.max(intervalAvg)
 ```
-... and happens during the `r mi`th interval
+... and happens during the 104th interval
 
 
-```{r echo=TRUE}
+
+```r
 maxslot <- as.character(intervalSlots[mi])
 ```
 
-... which is time slot `r maxslot`
+... which is time slot 835
 
 
 try aggregate, as was suggested on the discussion boards, and to check the results
 
-```{r echo=TRUE}
+
+```r
 ag <- aggregate(df2$steps ~ df2$interval, FUN=mean)
 ```
 
@@ -240,10 +297,11 @@ ag <- aggregate(df2$steps ~ df2$interval, FUN=mean)
 
 ## Imputing missing values
 
-Recall that the original file had `r nacount` rows with missing values, as previously calculated
+Recall that the original file had 2304 rows with missing values, as previously calculated
 
 For the next step we will replace the missing values with the mean value for the interval
-```{r echo=TRUE}
+
+```r
 idf <- df
 for (i in 1:n) {
         #if value is na, replace it with the mean for the time slot, as calculated in ag above
@@ -261,8 +319,19 @@ for (i in 1:n) {
 ```
 
 Display the first few lines to see that it has been done
-```{r echo=TRUE}
+
+```r
 head(idf)
+```
+
+```
+##       steps       date interval
+## 1 0.0051799 2012-10-01        0
+## 2 0.0010246 2012-10-01        5
+## 3 0.0003985 2012-10-01       10
+## 4 0.0004554 2012-10-01       15
+## 5 0.0002277 2012-10-01       20
+## 6 0.0063183 2012-10-01       25
 ```
 
 
